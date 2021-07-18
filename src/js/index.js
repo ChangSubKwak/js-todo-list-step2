@@ -59,6 +59,8 @@ function viewUserList() {
     if (element[0] >= length - 2) {
       return;
     }
+    console.log("element", element);
+
     element[1].addEventListener("click", () => {
       $("#user-list").children[selectIdx].classList.remove("active");
       $("#user-list").children[element[0]].classList.add("active");
@@ -79,11 +81,17 @@ async function createUser(userName) {
   })
   .then((response) => response.json())
   .then((json) => {
-    const lastIdx = $("#user-list").children.length - 3;
+    if (json.name === undefined) {
+      return;
+    }
+
+    let lastIdx = $("#user-list").children.length - 3;
     const lastChild = $("#user-list").children[lastIdx];
     lastChild.insertAdjacentHTML("afterend", `<button class="ripple">${json.name}</button>`);
+
+    lastIdx = $("#user-list").children.length - 3;
     $("#user-list").children[selectIdx].classList.remove("active");
-    $("#user-list").children[lastIdx + 1].classList.add("active");
+    $("#user-list").children[lastIdx].classList.add("active");
     selectIdx = lastIdx;
   });
 }
